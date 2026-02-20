@@ -5,6 +5,8 @@ import com.alurachallenge.conversor.servicios.ConsultaMoneda;
 import com.google.gson.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Principal {
@@ -13,8 +15,10 @@ public class Principal {
         ConsultaMoneda consulta = new ConsultaMoneda();
         ConversorDeMoneda conversor = new ConversorDeMoneda();
 
+        List<String> historial = new ArrayList<>();
+
         int opcion = 0;
-        while (opcion != 7) {
+        while (opcion != 8) {
             System.out.println("***************************************************");
             System.out.println("Sea bienvenido/a al Conversor de Moneda =]\n");
             System.out.println("1) Dólar =>> Sol peruano");
@@ -23,7 +27,8 @@ public class Principal {
             System.out.println("4) Real brasileño =>> Dólar");
             System.out.println("5) Dólar =>> Peso colombiano");
             System.out.println("6) Peso colombiano =>> Dólar");
-            System.out.println("7) Salir");
+            System.out.println("7) Ver historial");
+            System.out.println("8) Salir");
             System.out.print("Elija una opción válida: ");
 
             opcion = teclado.nextInt();
@@ -32,14 +37,32 @@ public class Principal {
                 System.out.print("Ingresa el valor que deseas convertir: ");
                 double monto = teclado.nextDouble();
 
+                String base = "";
+                String destino = "";
+
                 switch (opcion) {
-                    case 1 -> conversor.ejecutarConversion("USD", "PEN", monto, consulta);
-                    case 2 -> conversor.ejecutarConversion("PEN", "USD", monto, consulta);
-                    case 3 -> conversor.ejecutarConversion("USD", "BRL", monto, consulta);
-                    case 4 -> conversor.ejecutarConversion("BRL", "USD", monto, consulta);
-                    case 5 -> conversor.ejecutarConversion("USD", "COP", monto, consulta);
-                    case 6 -> conversor.ejecutarConversion("COP", "USD", monto, consulta);
+                    case 1 -> { base = "USD"; destino = "PEN"; }
+                    case 2 -> { base = "PEN"; destino = "USD"; }
+                    case 3 -> { base = "USD"; destino = "BRL"; }
+                    case 4 -> { base = "BRL"; destino = "USD"; }
+                    case 5 -> { base = "USD"; destino = "COP"; }
+                    case 6 -> { base = "COP"; destino = "USD"; }
                 }
+
+                String resultado = conversor.ejecutarConversion(base, destino, monto, consulta);
+                historial.add(resultado);
+
+            } else if (opcion == 7) {
+                System.out.println("\n--- HISTORIAL DE CONVERSIONES ---");
+                if (historial.isEmpty()) {
+                    System.out.println("No hay conversiones registradas.");
+                } else {
+                    historial.forEach(System.out::println);
+                }
+                System.out.println("---------------------------------\n");
+            } else if (opcion > 8) {
+                System.out.println("Opción no disponible. Cerrando el programa por seguridad...");
+                opcion = 8;
             }
         }
         System.out.println("¡Gracias por usar el conversor! Saliendo...");

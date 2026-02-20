@@ -14,7 +14,7 @@ public class ConsultaMoneda {
                                        double monto){
         //1. URL + clave API
         String clave = "301fb4e91e65e716a3e28352";
-        //clave = System.getenv("API_KEY");
+        clave = System.getenv("API_KEY");
         String urlFinal = "https://v6.exchangerate-api.com/v6/" + clave + "/pair/" +
                 monedaBase + "/" + monedaDestino + "/" + monto;
         try {
